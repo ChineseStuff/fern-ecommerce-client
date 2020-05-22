@@ -1,17 +1,18 @@
 import React from 'react';
-import { useStyles } from './styles';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-//Mui stuff
+//Material UI
+import styles from './styles';
+import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 const Product = props => {
-  const classes = useStyles();
   const {
+    classes,
     product: { name, imageUrl, likeCount, description, sku, createdAt },
   } = props;
 
@@ -33,4 +34,4 @@ const Product = props => {
   );
 };
 
-export default Product;
+export default withStyles(styles)(Product);

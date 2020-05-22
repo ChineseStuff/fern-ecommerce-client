@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Login from '../../pages/login';
 import { loginValidators } from '../commons/utils/Validators';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 
-const UserLogin = ({ handleLoggin, ...props }) => {
-  const [fields, setFields] = useState({});
+//Redux
+import { connect } from 'react-redux';
+import { loginUser } from '../../redux/actions/userActions';
+
+const UserLogin = ({ loginUser, UI, ...props }) => {
+  const [userData, setUserData] = useState({});
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (UI.errors) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        general: UI.errors[Object.keys(UI.errors)[0]],
+      }));
+    }
+  }, [UI]);
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setFields(prevFields => ({
+    setUserData(prevFields => ({
       ...prevFields,
       [name]: value,
     }));
@@ -22,32 +34,14 @@ const UserLogin = ({ handleLoggin, ...props }) => {
 
   function handleSave(e) {
     e.preventDefault();
-    setIsLoading(true);
     if (!isValidLoginForm()) {
-      setIsLoading(false);
       return;
     }
-    //prettier-ignore
-    axios.post('/login', fields)
-      .then(res => {
-        localStorage.setItem('FBIdToken',`Bearer ${res.data.token}`);
-        setIsLoading(false);
-        props.history.push('/');
-      })
-      .catch(err => {
-        console.log(err.response.data);
-        setErrors(err.response.data);
-        setIsLoading(false);
-      });
-
-    // let fields = {};
-    // fields.email = '';
-    // fields.password = '';
-    // setFields(fields);
+    loginUser(userData, props.history);
   }
 
   function isValidLoginForm() {
-    const _errors = loginValidators(fields);
+    const _errors = loginValidators(userData);
     setErrors(_errors);
     return Object.keys(_errors).length === 0;
   }
@@ -57,9 +51,24 @@ const UserLogin = ({ handleLoggin, ...props }) => {
       errors={errors}
       onChange={handleChange}
       onSave={handleSave}
-      isLoading={isLoading}
+      isLoading={UI.isLoading}
     />
   );
 };
 
-export default UserLogin;
+UserLogin.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state, ownProps) => ({
+  user: state.user,
+  UI: state.UI,
+});
+
+const mapDispatchToProps = {
+  loginUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserLogin);

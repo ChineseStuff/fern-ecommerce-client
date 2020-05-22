@@ -1,6 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
-
-export const useStyles = makeStyles({
+export default {
   card: {
     display: 'flex',
     marginBottom: 20,
@@ -15,4 +13,4 @@ export const useStyles = makeStyles({
     padding: 25,
     objectFit: 'cover',
   },
-});
+};

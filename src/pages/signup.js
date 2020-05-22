@@ -1,20 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import styles from './styles';
 import AppIcon from '../images/shop.png';
 
-//MUI stuff
+//Material UI
+import { withStyles } from '@material-ui/core/styles';
+import styles from './styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-const Signup = props => {
-  const { classes, onSave, onChange, errors, isLoading } = props;
+const Signup = ({ classes, onSave, onChange, errors, isLoading }) => {
   return (
     <Grid container className={classes.form}>
       <Grid item sm />

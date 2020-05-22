@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Signup from '../../pages/signup';
 import { signUpValidators } from '../commons/utils/Validators';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 
-const UserSignUp = props => {
-  const [fields, setFields] = useState({});
+//Redux stuff
+import { connect } from 'react-redux';
+import { signupUser } from '../../redux/actions/userActions';
+
+const UserSignUp = ({ signupUser, UI, ...props }) => {
+  const [userData, setUserData] = useState({});
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (UI.errors) {
+      setErrors(UI.errors);
+    }
+  }, [UI]);
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setFields(prevFields => ({
+    setUserData(prevFields => ({
       ...prevFields,
       [name]: value,
     }));
@@ -21,28 +30,16 @@ const UserSignUp = props => {
   }
 
   function handleSave(e) {
+    debugger;
     e.preventDefault();
-    setIsLoading(true);
     if (!isValidSignupForm()) {
-      setIsLoading(false);
       return;
     }
-    //prettier-ignore
-    axios.post('/signup', fields)
-      .then(res => {
-        localStorage.setItem('FBIdToken',`Bearer ${res.data.token}`);
-        setIsLoading(false);
-        props.history.push('/');
-      })
-      .catch(err => {
-        console.log(err.response.data);
-        setErrors(err.response.data);
-        setIsLoading(false);
-      });
+    signupUser(userData, props.history);
   }
 
   function isValidSignupForm() {
-    const _errors = signUpValidators(fields);
+    const _errors = signUpValidators(userData);
     setErrors(_errors);
     return Object.keys(_errors).length === 0;
   }
@@ -52,9 +49,24 @@ const UserSignUp = props => {
       errors={errors}
       onChange={handleChange}
       onSave={handleSave}
-      isLoading={isLoading}
+      isLoading={UI.isLoading}
     />
   );
 };
 
-export default UserSignUp;
+UserSignUp.propTypes = {
+  signupUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state, ownProps) => ({
+  user: state.user,
+  UI: state.UI,
+});
+
+const mapDispatchToProps = {
+  signupUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserSignUp);

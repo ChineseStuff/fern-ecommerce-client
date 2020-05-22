@@ -1,12 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
-import themeFile from './theme';
 import jwtDecode from 'jwt-decode';
 
-//MUI stuff
-import { ThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+//Redux stuff
+import configureStore from './redux/configureStore';
+import { Provider } from 'react-redux';
+//prettier-ignore
+import {logoutUser,setAuthenticated,getUserData} from './redux/actions/userActions'
+import axios from 'axios';
 
 //Components
 import NavBar from './components/NavBar';
@@ -18,44 +20,31 @@ import UserLogin from './components/auth/UserLogin';
 import UserSignUp from './components/auth/UserSignUp';
 
 function App() {
-  const theme = createMuiTheme(themeFile);
+  const store = configureStore();
 
-  let authenticated;
   const token = localStorage.FBIdToken;
   if (token) {
     const decodedToken = jwtDecode(token);
     if (decodedToken.exp * 1000 < Date.now()) {
-      // window.location.href = '/login';
-      authenticated = false;
+      store.dispatch(logoutUser());
+      window.location.href = '/login';
     } else {
-      authenticated = true;
+      store.dispatch(setAuthenticated());
+      axios.defaults.headers.common['Authorization'] = token;
+      store.dispatch(getUserData());
     }
   }
   return (
-    <ThemeProvider theme={theme}>
-      <div className='App'>
-        <Router>
-          <NavBar />
-          <div className='container'>
-            <Switch>
-              <Route exact path='/' render={props => <Home {...props} />} />
-              <AuthRoute
-                exact
-                path='/signup'
-                component={UserSignUp}
-                authenticated={authenticated}
-              />
-              <AuthRoute
-                exact
-                path='/login'
-                component={UserLogin}
-                authenticated={authenticated}
-              />
-            </Switch>
-          </div>
-        </Router>
+    <Provider store={store}>
+      <NavBar />
+      <div className='container'>
+        <Switch>
+          <Route exact path='/' render={props => <Home {...props} />} />
+          <AuthRoute exact path='/signup' component={UserSignUp} />
+          <AuthRoute exact path='/login' component={UserLogin} />
+        </Switch>
       </div>
-    </ThemeProvider>
+    </Provider>
   );
 }
 
