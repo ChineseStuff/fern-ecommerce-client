@@ -30,7 +30,6 @@ const UserSignUp = ({ signupUser, UI, ...props }) => {
   }
 
   function handleSave(e) {
-    debugger;
     e.preventDefault();
     if (!isValidSignupForm()) {
       return;

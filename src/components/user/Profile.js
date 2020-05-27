@@ -26,7 +26,7 @@ const Profile = ({
       <div className={classes.profile}>
         <div className='image-wrapper'>
           <img
-            src='https://firebasestorage.googleapis.com/v0/b/utn-fern-ecommerce.appspot.com/o/new-product.png?alt=media'
+            src='https://firebasestorage.googleapis.com/v0/b/utn-fern-ecommerce.appspot.com/o/man.jpg?alt=media'
             className='profile-image'
             alt='user pic'
           />

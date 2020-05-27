@@ -26,12 +26,12 @@ export const loginUser = (userData, history) => dispatch => {
       history.push('/');
     })
     .catch(error => {
+      console.log(error);
       dispatch(setErrors(error.response.data));
     });
 };
 
 export const signupUser = (newUserData, history) => dispatch => {
-  debugger;
   dispatch(loadingUI());
   axios
     .post('/signup', newUserData)

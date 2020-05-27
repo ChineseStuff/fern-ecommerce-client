@@ -5,8 +5,19 @@ export const SET_USER = 'SET_USER';
 export const LOADING_USER = 'LOADING_USER';
 
 //Product Reducer types
+export const LOADING_DATA = 'LOADING_DATA';
+export const LOAD_PRODUCTS_SUCCESS = 'LOAD_PRODUCTS_SUCCESS';
+export const POST_PRODUCT_SUCCESS = 'POST_PRODUCT_SUCCESS';
+export const DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS';
 
 //UI Reducer types
 export const SET_ERRORS = 'SET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const LOADING_UI = 'LOADING_UI';
+export const API_CALL_ERROR = 'API_CALL_ERROR';
+
+//Cart reducer types
+export const SHOW_CART = 'SHOW_CART';
+export const ADD_TO_CART_SUCCESS = 'ADD_TO_CART_SUCCESS';
+export const REMOVE_FROM_CART_SUCCESS = 'REMOVE_FROM_CART_SUCCESS';
+export const DECRESE_FROM_CART_SUCCESS = 'DECRESE_FROM_CART_SUCCESS';

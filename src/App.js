@@ -18,6 +18,8 @@ import AuthRoute from './components/commons/utils/auth/AuthRoute';
 import Home from './pages/home';
 import UserLogin from './components/auth/UserLogin';
 import UserSignUp from './components/auth/UserSignUp';
+import ManageShoppingCart from './components/cart/ManageShoppingCart';
+import ProductDetail from './components/products/ProductDetail';
 
 function App() {
   const store = configureStore();
@@ -42,8 +44,14 @@ function App() {
           <Route exact path='/' render={props => <Home {...props} />} />
           <AuthRoute exact path='/signup' component={UserSignUp} />
           <AuthRoute exact path='/login' component={UserLogin} />
+          <Route
+            exact
+            path='/product-detail/:sku'
+            render={props => <ProductDetail {...props} />}
+          />
         </Switch>
       </div>
+      <ManageShoppingCart />
     </Provider>
   );
 }

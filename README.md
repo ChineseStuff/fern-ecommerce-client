@@ -8,9 +8,9 @@ You will can...
 - Signup as new user
 - Login against firebase
 - Add new products
-- Like them
-- Change its image
-- Remove your own products
+- Add them to cart
+- Change its image (not Implemented in release 1.0.0)
+- Remove ONLY your own products
 
 ## API Base URL
 

@@ -1,10 +1,15 @@
 export default {
-  products: [],
+  productsData: {
+    products: [],
+    isLoading: false,
+  },
   user: {
     authenticated: false,
     loading: false,
     credentials: {},
-    likes: [],
+    cart: [],
+    isCartOpen: false,
+    totalCartPrice: 0,
   },
   UI: {
     isLoading: false,

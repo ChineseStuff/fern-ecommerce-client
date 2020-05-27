@@ -1,36 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
 //Redux
 import { connect } from 'react-redux';
-
+import { showCart } from '../redux/actions/cartActions';
 //Components
 import IcoBtnWithTooltip from './commons/IcoBtnWithTooltip';
+import CreateProductDialog from './products/CreateProductDialog';
 //Material UI
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import HomeIcon from '@material-ui/icons/Home';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import CartBudgeIcon from './commons/CartBudgeIcon';
 
-const NavBar = ({ authenticated, ...props }) => {
+const NavBar = ({ authenticated, showCart, cart, ...props }) => {
   const activeStyle = { color: 'orange' };
   const history = useHistory();
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    if (cart && cart.length > 0) {
+      let quantity = 0;
+      cart.map(item => (quantity += item.qty));
+      setCartCount(quantity);
+    } else {
+      setCartCount(0);
+    }
+  }, [cart]);
   return (
     <AppBar>
       <Toolbar className='nav-container'>
         {authenticated ? (
           <>
-            <IcoBtnWithTooltip tipText='Add a product'>
-              <PlaylistAddIcon />
-            </IcoBtnWithTooltip>
+            <CreateProductDialog />
             {/*prettier-ignore*/ }
             <IcoBtnWithTooltip tipText='Go to Home' onClick={() =>(history.push('/'))}>
               <HomeIcon/>
             </IcoBtnWithTooltip>
-            <IcoBtnWithTooltip tipText='Go to Cart'>
-              <ShoppingCartIcon />
+            <IcoBtnWithTooltip tipText='Go to Cart' onClick={() => showCart()}>
+              <CartBudgeIcon cartCount={cartCount} />
             </IcoBtnWithTooltip>
           </>
         ) : (
@@ -69,6 +78,10 @@ const NavBar = ({ authenticated, ...props }) => {
 
 const mapStateToProps = state => ({
   authenticated: state.user.authenticated,
+  cart: state.user.cart,
 });
 
-export default connect(mapStateToProps)(NavBar);
+const mapDispatchToProps = {
+  showCart,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
