@@ -23,6 +23,8 @@ import ProductDetail from './components/products/ProductDetail';
 
 function App() {
   const store = configureStore();
+  axios.defaults.baseURL =
+    'https://us-central1-utn-fern-ecommerce.cloudfunctions.net/api';
 
   const token = localStorage.FBIdToken;
   if (token) {
