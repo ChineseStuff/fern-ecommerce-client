@@ -16,5 +16,5 @@ You will can...
 
 https://us-central1-utn-fern-ecommerce.cloudfunctions.net/api
 
-Demo
+## Demo:
 https://utn-fern-ecommerce.web.app/
